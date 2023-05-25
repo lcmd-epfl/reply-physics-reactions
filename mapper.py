@@ -33,12 +33,19 @@ def get_maps_and_confidence(list_rxn_smiles):
     results = mapper.get_attention_guided_atom_maps(list_rxn_smiles)
     return results
 
-cyclo_df = pd.read_csv('data/cyclo/full_dataset.csv', index_col=0)
-rxn_smiles = cyclo_df['rxn_smiles']
+#cyclo_df = pd.read_csv('data/cyclo/full_dataset.csv', index_col=0)
+#rxn_smiles = cyclo_df['rxn_smiles']
+
+gdb_df = pd.read_csv("data/gdb7-22-ts/ccsdtf12_dz.csv", index_col=0)
+rxn_smiles = gdb_df['rxn_smiles']
+
 mod_rxn_smiles = rxn_smiles.apply(reset_smiles).to_list()
 maps = get_maps_and_confidence(mod_rxn_smiles)
 
-with open('data/maps_cyclo.pkl', 'wb') as f:
+#with open('data/maps_cyclo.pkl', 'wb') as f:
+ #   pickle.dump(maps, f)
+
+with open('data/maps_gdb.pkl', 'wb') as f:
     pickle.dump(maps, f)
 
 print("File saved")
