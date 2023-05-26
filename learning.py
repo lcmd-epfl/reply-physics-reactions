@@ -56,7 +56,7 @@ def KFold_MAE(X, y, folds=10):
         len_te = int(len(val_te_idx) / 2)
         te_idx = val_te_idx[:len_te]
         val_idx = val_te_idx[len_te:]
-        print(f"{len(tr_idx)} training points, {len(te_idx)} test, {len(val_idx)} val")
+        print(f"{len(y)} total dataset, {len(tr_idx)} train, {len(te_idx)} test, {len(val_idx)} val")
 
         X_te = X[te_idx]
         X_val = X[val_idx]
