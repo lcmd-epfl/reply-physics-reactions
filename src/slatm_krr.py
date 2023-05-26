@@ -1,6 +1,6 @@
 import numpy as np
-import reaction_reps
-import learning
+import src import reaction_reps
+import src import learning
 import os
 import argparse as ap
 
