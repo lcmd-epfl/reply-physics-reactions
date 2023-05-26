@@ -2,6 +2,14 @@ from rxnmapper import RXNMapper
 import pandas as pd
 from rdkit import Chem
 import pickle
+import argparse as ap
+
+def argparse():
+    parser = ap.ArgumentParser()
+    parser.add_argument('-c', '--cyclo', action='store_true')
+    parser.add_argument('-g', '--gdb', action='store_true')
+    args = parser.parse_args()
+    return args
 
 def clear_atom_map(mol):
     for atom in mol.GetAtoms():
@@ -33,26 +41,31 @@ def get_maps_and_confidence(list_rxn_smiles):
     results = mapper.get_attention_guided_atom_maps(list_rxn_smiles)
     return results
 
-cyclo = False
-gdb = True
+if __name__ == '__main__':
+    args = argparse()
+    cyclo = args.cyclo
+    gdb = args.gdb
 
-if cyclo:
-    cyclo_df = pd.read_csv('data/cyclo/full_dataset.csv', index_col=0)
-    rxn_smiles = cyclo_df['rxn_smiles']
+    if cyclo:
+        cyclo_df = pd.read_csv('data/cyclo/full_dataset.csv', index_col=0)
+        rxn_smiles = cyclo_df['rxn_smiles']
 
-if gdb:
-    gdb_df = pd.read_csv("data/gdb7-22-ts/ccsdtf12_dz.csv", index_col=0)
-    rxn_smiles = gdb_df['rxn_smiles']
+        mod_rxn_smiles = rxn_smiles.apply(reset_smiles).to_list()
+        maps = get_maps_and_confidence(mod_rxn_smiles)
 
-mod_rxn_smiles = rxn_smiles.apply(reset_smiles).to_list()
-maps = get_maps_and_confidence(mod_rxn_smiles)
+        with open('data/maps_cyclo.pkl', 'wb') as f:
+            pickle.dump(maps, f)
 
-if cyclo:
-    with open('data/maps_cyclo.pkl', 'wb') as f:
-        pickle.dump(maps, f)
+        print("File for cyclo atom maps saved")
 
-if gdb:
-    with open('data/maps_gdb.pkl', 'wb') as f:
-        pickle.dump(maps, f)
+    if gdb:
+        gdb_df = pd.read_csv("data/gdb7-22-ts/ccsdtf12_dz.csv", index_col=0)
+        rxn_smiles = gdb_df['rxn_smiles']
 
-print("File saved")
+        mod_rxn_smiles = rxn_smiles.apply(reset_smiles).to_list()
+        maps = get_maps_and_confidence(mod_rxn_smiles)
+
+        with open('data/maps_gdb.pkl', 'wb') as f:
+            pickle.dump(maps, f)
+
+        print("File for gdb atom maps saved")
