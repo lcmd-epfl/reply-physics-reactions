@@ -53,7 +53,7 @@ if __name__ == '__main__':
         mod_rxn_smiles = rxn_smiles.apply(reset_smiles).to_list()
         maps = get_maps_and_confidence(mod_rxn_smiles)
 
-        with open('data/maps_cyclo.pkl', 'wb') as f:
+        with open('data/cyclo/maps_cyclo.pkl', 'wb') as f:
             pickle.dump(maps, f)
 
         print("File for cyclo atom maps saved")
@@ -65,7 +65,7 @@ if __name__ == '__main__':
         mod_rxn_smiles = rxn_smiles.apply(reset_smiles).to_list()
         maps = get_maps_and_confidence(mod_rxn_smiles)
 
-        with open('data/maps_gdb.pkl', 'wb') as f:
+        with open('data/gdb7-22-ts/maps_gdb.pkl', 'wb') as f:
             pickle.dump(maps, f)
 
         print("File for gdb atom maps saved")

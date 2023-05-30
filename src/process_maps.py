@@ -18,7 +18,7 @@ if __name__ == '__main__':
         print("Processing cyclo")
         cyclo_df = pd.read_csv("data/cyclo/full_dataset.csv", index_col=0)
 
-        with open("data/maps_cyclo.pkl", "rb") as f:
+        with open("data/cyclo/maps_cyclo.pkl", "rb") as f:
             maps_cyclo = pickle.load(f)
 
         keep_cyclo_energies = []
@@ -43,7 +43,7 @@ if __name__ == '__main__':
         print("Processing gdb")
         gdb_df = pd.read_csv('data/gdb7-22-ts/ccsdtf12_dz.csv', index_col=0)
 
-        with open("data/maps_gdb.pkl", "rb") as f:
+        with open("data/gdb7-22-ts/maps_gdb.pkl", "rb") as f:
             maps_gdb = pickle.load(f)
 
         keep_gdb_energies = []
