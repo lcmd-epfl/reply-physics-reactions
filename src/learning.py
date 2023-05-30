@@ -44,14 +44,13 @@ def opt_hyperparams(
     return min_sigma, min_l2reg
 
 def KFold_MAE(X, y, folds=10):
-    kf = KFold(n_splits=int(folds/2), random_state=2, shuffle=True)
+    kf = KFold(n_splits=folds, random_state=2, shuffle=True)
     maes = []
     for i, (tr_idx, val_te_idx) in enumerate(kf.split(y)):
-        print(f"CV split {i + 1} / {int(folds/2)}")
+        print(f"CV split {i + 1} / {folds}")
         X_tr = X[tr_idx]
         y_tr = y[tr_idx]
 
-        print("First te/val split")
         # further split into val indices
         len_te = int(len(val_te_idx) / 2)
         te_idx = val_te_idx[:len_te]
@@ -67,26 +66,6 @@ def KFold_MAE(X, y, folds=10):
         print("Optimising hypers...")
         sigma, l2reg = opt_hyperparams(X_tr, X_val, y_tr, y_val, l2regs=[1e-10, 1e-7, 1e-4], sigmas=[10, 100, 1e3])
         print(f"Opt hypers sigma={sigma} and l2reg={l2reg}")
-        mae, y_pred = predict_KRR(X_tr, X_te, y_tr, y_te, sigma=sigma, l2reg=l2reg)
-        maes.append(mae)
-
-        print("MAE", mae)
-
-        print("Second te/val split")
-        # further split into val indices
-        te_idx = val_te_idx[len_te:]
-        val_idx = val_te_idx[:len_te]
-        print(f"{len(tr_idx)} training points, {len(te_idx)} test, {len(val_idx)} val")
-
-        X_te = X[te_idx]
-        X_val = X[val_idx]
-
-        y_te = y[te_idx]
-        y_val = y[val_idx]
-
-        sigma, l2reg = opt_hyperparams(X_tr, X_val, y_tr, y_val, l2regs=[1e-10, 1e-7, 1e-4], sigmas=[10, 100, 1e3])
-        print(f"Opt hypers sigma={sigma} and l2reg={l2reg}")
-
         mae, y_pred = predict_KRR(X_tr, X_te, y_tr, y_te, sigma=sigma, l2reg=l2reg)
         maes.append(mae)
 

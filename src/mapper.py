@@ -8,6 +8,7 @@ def argparse():
     parser = ap.ArgumentParser()
     parser.add_argument('-c', '--cyclo', action='store_true')
     parser.add_argument('-g', '--gdb', action='store_true')
+    parser.add_argument('-p', '--proparg', action='store_true')
     args = parser.parse_args()
     return args
 
@@ -45,6 +46,7 @@ if __name__ == '__main__':
     args = argparse()
     cyclo = args.cyclo
     gdb = args.gdb
+    proparg = args.proparg
 
     if cyclo:
         cyclo_df = pd.read_csv('data/cyclo/full_dataset.csv', index_col=0)
@@ -69,3 +71,17 @@ if __name__ == '__main__':
             pickle.dump(maps, f)
 
         print("File for gdb atom maps saved")
+
+    if proparg:
+        # Doesn't work !
+        print("For proparg tokens cannot be generated with RXNMapper. Trying anyway...")
+        proparg_df = pd.read_csv("data/proparg/data.csv", index_col=0)
+        rxn_smiles = proparg_df['rxn_smiles']
+
+        mod_rxn_smiles = rxn_smiles.apply(reset_smiles).to_list()
+        maps = get_maps_and_confidence(mod_rxn_smiles)
+
+        with open('data/proparg/maps_gdb.pkl', 'wb') as f:
+            pickle.dump(maps, f)
+
+        print("File for proparg atom maps saved")
