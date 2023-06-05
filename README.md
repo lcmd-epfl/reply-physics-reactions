@@ -17,3 +17,5 @@ The codes in `src/` provide:
 
 ## CGR results
 Results of the CGR runs are saved to `results/`.
+
+To run CGR models yourself, you will need to do so using chemprop, with the csv files in the data directory.
