@@ -217,6 +217,32 @@ class QML:
         self.unique_ncharges = np.unique(np.concatenate(self.ncharges))
         return
 
+    def get_proparg_data(self):
+        data = pd.read_csv("data/proparg/data.csv", index_col=0)
+        reactants_files = [
+            "data/proparg/data_react_xyz/"
+            + data.mol.values[i]
+            + data.enan.values[i]
+            + ".xyz"
+            for i in range(len(data))
+        ]
+        products_files = [
+            "data/proparg/data_prod_xyz/"
+            + data.mol.values[i]
+            + data.enan.values[i]
+            + ".xyz"
+            for i in range(len(data))
+        ]
+        all_mols = [qml.Compound(x) for x in reactants_files + products_files]
+        self.barriers = data.dErxn.to_numpy()
+        self.ncharges = [mol.nuclear_charges for mol in all_mols]
+        self.unique_ncharges = np.unique(np.concatenate(self.ncharges))
+
+        self.mols_reactants = [[qml.Compound(x)] for x in reactants_files]
+        self.mols_products = [[qml.Compound(x)] for x in products_files]
+
+        return
+
     def get_SLATM(self):
         mbtypes = qml.representations.get_slatm_mbtypes(self.ncharges)
 

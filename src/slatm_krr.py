@@ -8,6 +8,7 @@ def argparse():
     parser = ap.ArgumentParser()
     parser.add_argument('-c', '--cyclo', action='store_true')
     parser.add_argument('-g', '--gdb', action='store_true')
+    parser.add_argument('-p', '--proparg', action='store_true')
     args = parser.parse_args()
     return args
 
@@ -15,6 +16,7 @@ if __name__ == '__main__':
     args = argparse()
     cyclo = args.cyclo
     gdb = args.gdb
+    proparg = args.proparg
 
     qml_obj = reaction_reps.QML()
     if cyclo:
@@ -58,3 +60,24 @@ if __name__ == '__main__':
         mean_mae = np.mean(maes)
         std_mae = np.std(maes)
         print(f"GDB MAE={mean_mae}+-{std_mae}")
+
+    if proparg:
+        qml_obj.get_proparg_data()
+
+        if not os.path.exists('data/proparg/slatm.npy'):
+            slatm = qml_obj.get_SLATM()
+            np.save('data/proparg/slatm.npy', slatm)
+        else:
+            slatm = np.load('data/proparg/slatm.npy')
+
+        y = qml_obj.barriers
+        folds = 10
+        fname = 'data/proparg/slatm_' + str(folds) + 'fold.npy'
+        if not os.path.exists(fname):
+            maes = learning.KFold_MAE(slatm, y, folds=folds)
+            np.save(fname, maes)
+        else:
+            maes = np.load(fname)
+        mean_mae = np.mean(maes)
+        std_mae = np.std(maes)
+        print(f"Proparg MAE={mean_mae}+-{std_mae}")
