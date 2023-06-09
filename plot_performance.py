@@ -55,7 +55,7 @@ ax.set_xticks([])
 handles, labels = axes[1].get_legend_handles_labels()
 plt.tight_layout()
 
-plt.legend(handles, labels, bbox_to_anchor=(1.01,1.01))
+plt.legend(handles, labels, bbox_to_anchor=(1.6,-0.02), ncol=3)
 
 if not stuyver:
     figname = 'figures/atom_mapping_quality.pdf'
