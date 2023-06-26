@@ -176,7 +176,7 @@ class QML:
             for i in range(len(data))
         ]
         all_mols = [qml.Compound(x) for x in reactants_files + products_files]
-        self.barriers = data.dErxn.to_numpy()
+        self.barriers = data.Eafw.to_numpy()
         self.ncharges = [mol.nuclear_charges for mol in all_mols]
         self.unique_ncharges = np.unique(np.concatenate(self.ncharges))
 
